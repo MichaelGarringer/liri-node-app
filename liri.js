@@ -1,4 +1,5 @@
 require("dotenv").config();
+var axios = require("axios")
 var fs = require("fs")
 var Spotify = require('node-spotify-api');
 var keys = require("./keys")
@@ -10,11 +11,12 @@ var query = input[3]
 
 
 //concert-this
-if (command === "concert-this") {
-    console.log("Concert")
-}
+
 //If the command is something different that concert-this run the correct command
 switch (command) {
+    case "concert-this":
+        console.log("Feature coming soon")
+        break;
     //spotify-this-song
     case "spotify-this-song":
         spotify(query);
@@ -22,36 +24,88 @@ switch (command) {
 
     //movie-this
     case "movie-this":
-        console.log("Movies")
+        movie(query);
         break;
 
     //do-what-it-says
     case "do-what-it-says":
-        console.log("Text")
+        doIt()
         break;
+    default:
+        console.log(`
+    Use one of the following statements
+    concert-this
+    spotify-this-song
+    movie-this
+    do-what-it-says
+    `)
 };
 
 
 
 //Spotify function
-function spotify(query) {
+function spotify(query = "The Sign Ace of Base") {
     var spotify = new Spotify(keys.spotify);
-    if (!query) {
-        query = "The Sign"
-    }
     spotify.search({ type: 'track', query: query }, function (err, data) {
         if (err) {
             console.log('Error occurred: ' + err);
             return;
         }
-     var song = data.tracks.items;
+        var song = data.tracks.items;
         console.log(
             `
 Song: ${song[0].name}
 Artist:${song[0].artists[0].name}
 Album: ${song[0].album.name}
 Preview link: ${song[0].preview_url}
-  `
+`
         )
     });
+};
+//Movie function
+function movie(query = "mr nobody") {
+
+    var queryURL = "http://www.omdbapi.com/?t=" + query + "&y=&plot=short&tomatoes=true&apikey=trilogy";
+
+
+    axios.get(queryURL).then(function (response) {
+        var mov = response.data;
+        console.log(`Title: ${mov.data.Title}
+Year: ${mov.data.Year}
+Plot: ${mov.data.Plot}
+`
+        )
+
+
+    });
+
+
+};
+//Do it function
+function doIt() {
+    fs.readFile("random.txt", "utf-8", function (err, response) {
+        var dataArray = response.split(",")
+        console.log(dataArray[0])
+        //If the command is something different that concert-this run the correct command
+        switch (dataArray[0]) {
+            //spotify-this-song
+            case "spotify-this-song":
+                spotify(dataArray[1]);
+                break;
+
+            //movie-this
+            case "movie-this":
+                movie(dataArray[1]);
+                break;
+
+            //do-what-it-says
+            case "concert-this":
+                console.log("Concert")
+                break;
+        };
+
+
+    })
 }
+
+
