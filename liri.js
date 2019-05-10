@@ -15,7 +15,7 @@ var query = input[3]
 //If the command is something different that concert-this run the correct command
 switch (command) {
     case "concert-this":
-        console.log("Feature coming soon")
+        concert(query)
         break;
     //spotify-this-song
     case "spotify-this-song":
@@ -79,8 +79,27 @@ Plot: ${mov.data.Plot}
 
     });
 
+}
+//Concert function
+function concert(query){
+    if (!query){
+        query = "Rush"
+    }
+    var queryURL  = "https://rest.bandsintown.com/artists/" + query + "/events?app_id=codingbootcamp"
+    axios.get(queryURL).then(function(response){
 
-};
+    var artData = response.data
+    console.log(
+    `
+    Artist(s): ${artData[0].lineup}
+    Venue: ${artData[0].venue.name}
+    Location: ${artData[0].venue.city + "," + artData[0].venue.region}
+    Time: ${artData[0].datetime}
+    `
+    )}
+
+    )};
+
 //Do it function
 function doIt() {
     fs.readFile("random.txt", "utf-8", function (err, response) {
