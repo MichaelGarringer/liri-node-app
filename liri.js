@@ -74,6 +74,12 @@ function movie(query = "mr nobody") {
             `Title: ${response.data.Title}
 Year: ${response.data.Year}
 Plot: ${response.data.Plot}
+IMDB rating: ${response.data.Ratings[0].Value}
+Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}
+Country: ${response.data.Country}
+Language: ${response.data.Language}
+Cast: ${response.data.Actors}
+
 `
         )
 
@@ -84,20 +90,20 @@ Plot: ${response.data.Plot}
 //Concert function
 function concert(query) {
     if (!query) {
-        query = "Shaky Graves"
+        query = "Shakey Graves"
     }
     var queryURL = "https://rest.bandsintown.com/artists/" + query + "/events?app_id=codingbootcamp"
     axios.get(queryURL).then(function (response) {
-
-        var artData = response.data
+    
+        for(var i= 0; i < response.data.length; i++){
         console.log(
             `
-    Artist(s): ${artData[0].lineup}
-    Venue: ${artData[0].venue.name}
-    Location: ${artData[0].venue.city}
-    Time: ${moment(artData[0].datatime).format("MMMM Do YYYY, h:mm:ss a")}
-    `
-        )
+    Artist(s): ${response.data[i].lineup}
+    Venue: ${response.data[i].venue.name}
+    Location: ${response.data[i].venue.city}
+    Time: ${moment(response.data[i].datetime).format("MM/DD/YY")}
+    `)
+    }
     }
 
     )
@@ -122,7 +128,7 @@ function doIt() {
 
             //do-what-it-says
             case "concert-this":
-                console.log("Concert")
+                concert(dataArray[1])
                 break;
         };
 
