@@ -54,11 +54,12 @@ function spotify(query = "The Sign Ace of Base") {
         }
         var song = data.tracks.items;
         console.log(
-            `
+            `----------------
 Song: ${song[0].name}
 Artist:${song[0].artists[0].name}
 Album: ${song[0].album.name}
 Preview link: ${song[0].preview_url}
+----------------
 `
         )
     });
@@ -71,7 +72,9 @@ function movie(query = "mr nobody") {
 
     axios.get(queryURL).then(function (response) {
         console.log(
-            `Title: ${response.data.Title}
+        
+            `----------------
+Title: ${response.data.Title}
 Year: ${response.data.Year}
 Plot: ${response.data.Plot}
 IMDB rating: ${response.data.Ratings[0].Value}
@@ -79,7 +82,7 @@ Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}
 Country: ${response.data.Country}
 Language: ${response.data.Language}
 Cast: ${response.data.Actors}
-
+---------------
 `
         )
 
@@ -97,11 +100,12 @@ function concert(query) {
     
         for(var i= 0; i < response.data.length; i++){
         console.log(
-            `
+            `----------------
     Artist(s): ${response.data[i].lineup}
     Venue: ${response.data[i].venue.name}
     Location: ${response.data[i].venue.city}
     Time: ${moment(response.data[i].datetime).format("MM/DD/YY")}
+    ----------------
     `)
     }
     }
