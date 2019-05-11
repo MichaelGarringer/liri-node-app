@@ -3,6 +3,7 @@ var axios = require("axios")
 var fs = require("fs")
 var Spotify = require('node-spotify-api');
 var keys = require("./keys")
+var moment = require("moment")
 
 //Vars for user input//
 var input = process.argv
@@ -69,10 +70,10 @@ function movie(query = "mr nobody") {
 
 
     axios.get(queryURL).then(function (response) {
-        var mov = response.data;
-        console.log(`Title: ${mov.data.Title}
-Year: ${mov.data.Year}
-Plot: ${mov.data.Plot}
+        console.log(
+            `Title: ${response.data.Title}
+Year: ${response.data.Year}
+Plot: ${response.data.Plot}
 `
         )
 
@@ -81,24 +82,26 @@ Plot: ${mov.data.Plot}
 
 }
 //Concert function
-function concert(query){
-    if (!query){
-        query = "Rush"
+function concert(query) {
+    if (!query) {
+        query = "Shaky Graves"
     }
-    var queryURL  = "https://rest.bandsintown.com/artists/" + query + "/events?app_id=codingbootcamp"
-    axios.get(queryURL).then(function(response){
+    var queryURL = "https://rest.bandsintown.com/artists/" + query + "/events?app_id=codingbootcamp"
+    axios.get(queryURL).then(function (response) {
 
-    var artData = response.data
-    console.log(
-    `
+        var artData = response.data
+        console.log(
+            `
     Artist(s): ${artData[0].lineup}
     Venue: ${artData[0].venue.name}
-    Location: ${artData[0].venue.city + "," + artData[0].venue.region}
-    Time: ${artData[0].datetime}
+    Location: ${artData[0].venue.city}
+    Time: ${moment(artData[0].datatime).format("MMMM Do YYYY, h:mm:ss a")}
     `
-    )}
+        )
+    }
 
-    )};
+    )
+};
 
 //Do it function
 function doIt() {
